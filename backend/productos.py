@@ -47,3 +47,17 @@ def crearProducto(id, nombre, precio, cantidad):
 
     return True
 
+
+def eliminarProducto(id):
+    producto = consultarProducto(id)
+
+    if producto == None:
+        return False
+
+    hoja.delete_rows(producto[0] + 2)
+    
+
+    guardarHoja(hoja)
+
+    return True
+
