@@ -1,4 +1,5 @@
 from backend.hoja_productos import obtenerHojaDeProductos
+from backend.hoja_productos import guardarHoja
 
 hoja = obtenerHojaDeProductos()
 
@@ -31,3 +32,18 @@ def consultarProducto(id):
             return valores
 
     return None
+
+def crearProducto(id, nombre, precio, cantidad):
+    if consultarProducto(id) != None:
+        return False
+    #verificar que el id no exista en la hoja de productos
+
+
+    producto = (id, nombre, precio, cantidad)
+
+    hoja.append(producto)
+
+    guardarHoja(hoja)
+
+    return True
+
