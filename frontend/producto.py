@@ -4,7 +4,7 @@ from utils.terminal import limpiar
 
 ENCABEZADOS = ["Id", "Nombre", "Precio", "Cantidad"]
 
-def pedir_numero(mensaje):
+def pedirNumero(mensaje):
     while True:
         texto = input(mensaje)
         try:
@@ -14,30 +14,27 @@ def pedir_numero(mensaje):
             continue
         return int(numero) if numero.is_integer() else numero
 
-def solicitar_producto():
+def solicitarProducto():
     id_producto = input("Ingresa el Id del producto: ")
     nombre = input("Ingresa el nombre del producto: ")
-    precio = pedir_numero("Ingresa el precio del producto: ")
-    cantidad = pedir_numero("Ingresa la cantidad del producto: ")
-
+    precio = pedirNumero("Ingresa el precio del producto: ")
+    cantidad = pedirNumero("Ingresa la cantidad del producto: ")
     return (id_producto, nombre, precio, cantidad)
 
-def listar_productos():
+def listarProductos():
     productos = Producto.listarProductos()
     print(tabulate(productos, headers=ENCABEZADOS, tablefmt="rounded_grid"))
 
-def consultar_producto():
+def consultarProducto():
     id_producto = input("Ingresa el Id del producto: ")
     producto = Producto.consultarProducto(id_producto)
-
     if producto is None:
         print("El producto con Id " + id_producto + " no existe")
         return
-
     print(tabulate([producto[1:]], headers=ENCABEZADOS, tablefmt="rounded_grid"))
 
 def crearProducto():
-    nuevo_producto = solicitar_producto()
+    nuevo_producto = solicitarProducto()
     producto_creado = Producto.crearProducto(*nuevo_producto)
     if producto_creado:
         print("Producto agregado exitosamente")
@@ -46,23 +43,30 @@ def crearProducto():
 
 def eliminarProducto():
     id_producto = input("Ingresa el Id del producto a eliminar: ")
-
     producto_eliminado = Producto.eliminarProducto(id_producto)
-
     if producto_eliminado:
         print("Producto eliminado exitosamente")
     else:
         print("Error eliminando el producto, verifique que el producto con ese Id sí existe")
+
+def actualizarProducto():
+    nuevo_producto = solicitarProducto()
+    producto_actualizado = Producto.actualizarProducto(*nuevo_producto)
+    if producto_actualizado:
+        print("Producto actualizado exitosamente")
+    else:
+        print("Error actualizando el producto, verifique que el producto con ese Id sí existe")
 
 def mostrar_menu_de_productos():
     separador = "-" * 40
     bienvenida = "Bienvenido a la gestión de productos"
 
     opciones = {
-        "1": listar_productos,
-        "2": consultar_producto,
+        "1": listarProductos,
+        "2": consultarProducto,
         "3": crearProducto,
         "4": eliminarProducto,
+        "5": actualizarProducto
     }
 
     solicitud = "Ingresa una opción: "
@@ -75,14 +79,15 @@ def mostrar_menu_de_productos():
             + "\n2. Consultar producto"
             + "\n3. Agregar producto"
             + "\n4. Eliminar producto"
-            + "\n5. Salir\n"
+            + "\n5. Actualizar producto"
+            + "\n6. Salir\n"
         )
         print(menu)
 
         opcion = input(solicitud)
         salida = False
 
-        if opcion == "5":
+        if opcion == "6":
             limpiar()
             break
         elif opcion in opciones:
